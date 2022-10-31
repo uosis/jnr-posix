@@ -14,6 +14,10 @@ public abstract class SpawnFileAction {
         return new Dup(fd, newfd);
     }
 
+    public static SpawnFileAction chdir(String path) {
+        return new Chdir(path);
+    }
+
     public static SpawnFileAction open(String path, int fd, int flags, int mode) {
         return new Open(path, fd, flags, mode);
     }
@@ -36,6 +40,22 @@ public abstract class SpawnFileAction {
 
         public String toString() {
             return "SpawnFileAction::Dup(old = " + fd + ", new = " + newfd + ")";
+        }
+    }
+
+    private static final class Chdir extends SpawnFileAction {
+        final String path;
+
+        public Chdir(String path) {
+            this.path = path;
+        }
+
+        final boolean act(POSIX posix, Pointer nativeFileActions) {
+            return ((UnixLibC) posix.libc()).posix_spawn_file_actions_addchdir_np(nativeFileActions, path) == 0;
+        }
+
+        public String toString() {
+            return "SpawnFileAction::Chdir(path = '" + path + "')";
         }
     }
 

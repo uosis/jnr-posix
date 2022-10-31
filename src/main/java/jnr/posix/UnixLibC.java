@@ -32,6 +32,7 @@ public interface UnixLibC extends LibC {
     public int posix_spawn_file_actions_addopen(Pointer fileActions, int filedes, @Direct ByteBuffer path,
                                                 int oflag, int mode);
     public int posix_spawn_file_actions_adddup2(Pointer fileActions, int filedes, int newfiledes);
+    public int posix_spawn_file_actions_addchdir_np(Pointer fileActions, CharSequence path);
     public int posix_spawnattr_init(Pointer attr);
     public int posix_spawnattr_destroy(Pointer attr);
     public int posix_spawnattr_setflags(Pointer attr, short flags);
